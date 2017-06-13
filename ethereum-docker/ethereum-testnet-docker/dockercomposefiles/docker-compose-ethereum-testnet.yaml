@@ -1,0 +1,85 @@
+version: '2.1'
+networks:
+  ethereumnet:
+    driver: bridge
+    enable_ipv6: true
+    ipam:
+      driver: default
+      config:
+      -
+        subnet: 172.16.238.0/24
+      -
+        subnet: 2001:3984:3989::/64  
+services:
+  geth-cluster0:
+    container_name: geth-cluster0
+    image: blockchain101/ethereum-geth:1.6.5
+    environment:
+      - CLUSTER_DATADIR=/ethcluster
+      - NETWORK_ID=779977
+      - CLUSTER_INSTANCE_NUM=4
+      - CLUSTER_BOOT_NODE=Y
+      - CLUSTER_MINING=N
+      - CLUSTER_ID=0
+      - CLUSTER_SHAREDIR=/ethcluster_share      
+      - CLUSTER_HOST_IP=172.16.238.10
+      #################INIT_CONFIG SETTING###################
+      # Y - recreate accounts, nodes and nodes data with/without genesis file based on GENESIS_FILE_ENABLED flag
+      # N - no accounts, nodes and nodes data regeneration if not the first time initialization nodes and accounts
+      # GENESIS_BLOCK_REGEN - no accounts regeneration, but nodes and nodes data will be regenerated with/without genesis file based on GENESIS_FILE_ENABLED flag
+      - INIT_CONFIG=GENESIS_BLOCK_REGEN
+      - GENESIS_FILE_ENABLED=Y
+      - GENESIS_FILE=/ethcluster_share/genesis-779977.json
+    command: bash -c "./rungeth.sh; tail -f /ethcluster/779977/log/00.log"
+    #command: bash -c "sleep 1000000"
+    networks:
+      ethereumnet:
+        ipv4_address: 172.16.238.10
+        ipv6_address: 2001:3984:3989::10      
+        aliases:
+          - geth-cluster0.bctrustmachine.cn
+    ports:
+      - 8200-8210:8200-8210
+
+    volumes:
+        - /home/rodger/ethcluster/cluster0:/ethcluster
+        - /home/rodger/ethcluster_share:/ethcluster_share
+        - /home/rodger/ethcluster_share/ethash:/root/.ethash   
+        
+        
+  geth-cluster1:
+    container_name: geth-cluster1
+    image: blockchain101/ethereum-geth:1.6.5
+    environment:
+      - CLUSTER_DATADIR=/ethcluster
+      - NETWORK_ID=779977
+      - CLUSTER_INSTANCE_NUM=4
+      - CLUSTER_BOOT_NODE=N
+      - CLUSTER_MINING=Y
+      - CLUSTER_ID=1
+      - CLUSTER_SHAREDIR=/ethcluster_share      
+      - CLUSTER_HOST_IP=172.16.238.11
+      #################INIT_CONFIG SETTING###################
+      # Y - recreate accounts, nodes and nodes data with/without genesis file based on GENESIS_FILE_ENABLED flag
+      # N - no accounts, nodes and nodes data regeneration if not the first time initialization nodes and accounts
+      # GENESIS_BLOCK_REGEN - no accounts regeneration, but nodes and nodes data will be regenerated with/without genesis file based on GENESIS_FILE_ENABLED flag
+      - INIT_CONFIG=Y
+      - GENESIS_FILE_ENABLED=Y
+      - GENESIS_FILE=/ethcluster_share/genesis-779977.json
+    #should waiting for geth-cluster0 bootnode-ip generated in /ethcluster_share
+    command: bash -c "./checkbootnode.sh; ./rungeth.sh; tail -f /ethcluster/779977/log/00.log"
+    #command: bash -c "sleep 1000000"
+    networks:
+      ethereumnet:
+        ipv4_address: 172.16.238.11
+        ipv6_address: 2001:3984:3989::11      
+        aliases:
+          - geth-cluster1.bctrustmachine.cn
+    ports:
+      - 9200-9210:8200-8210
+
+    volumes:
+        - /home/rodger/ethcluster/cluster1:/ethcluster
+        - /home/rodger/ethcluster_share:/ethcluster_share
+        - /home/rodger/ethcluster_share/ethash:/root/.ethash           
+
