@@ -1,1 +1,1 @@
-dockerfile files to create blockchain101/fabric-dev blockchain101/fabric-testnet images which submitted in docker hub and and docker-compose file to run fabric 0.6.1 and 1.0 dev and testnet multi-nodes containers
+dockerfile files to create blockchain101/ethereum-geth and blockchain101/ethereum-solc images which submitted in docker hub and and docker-compose file to run geth 1.6.5 ethereum network multi-peers clusterized containers
