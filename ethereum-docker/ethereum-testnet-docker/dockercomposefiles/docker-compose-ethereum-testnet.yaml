@@ -27,7 +27,7 @@ services:
       # Y - recreate accounts, nodes and nodes data with/without genesis file based on GENESIS_FILE_ENABLED flag
       # N - no accounts, nodes and nodes data regeneration if not the first time initialization nodes and accounts
       # GENESIS_BLOCK_REGEN - no accounts regeneration, but nodes and nodes data will be regenerated with/without genesis file based on GENESIS_FILE_ENABLED flag
-      - INIT_CONFIG=GENESIS_BLOCK_REGEN
+      - INIT_CONFIG=Y
       - GENESIS_FILE_ENABLED=Y
       - GENESIS_FILE=/ethcluster_share/genesis-779977.json
     command: bash -c "./rungeth.sh; tail -f /ethcluster/779977/log/00.log"
