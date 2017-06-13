@@ -42,10 +42,10 @@ services:
       - 8200-8210:8200-8210
 
     volumes:
-        - /home/rodger/ethcluster/cluster0:/ethcluster
-        - /home/rodger/ethcluster_share:/ethcluster_share
-        - /home/rodger/ethcluster_share/ethash:/root/.ethash   
-        
+        - ./ethcluster/cluster0:/ethcluster
+        - ./ethcluster_share:/ethcluster_share
+        - ./ethcluster_share/ethash:/root/.ethash   
+        - ./genesis-779977.json:/ethcluster_share/genesis-779977.json        
         
   geth-cluster1:
     container_name: geth-cluster1
@@ -79,7 +79,8 @@ services:
       - 9200-9210:8200-8210
 
     volumes:
-        - /home/rodger/ethcluster/cluster1:/ethcluster
-        - /home/rodger/ethcluster_share:/ethcluster_share
-        - /home/rodger/ethcluster_share/ethash:/root/.ethash           
+        - ./ethcluster/cluster1:/ethcluster
+        - ./ethcluster_share:/ethcluster_share
+        - ./ethcluster_share/ethash:/root/.ethash
+        - ./genesis-779977.json:/ethcluster_share/genesis-779977.json           
 
